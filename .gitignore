@@ -2,4 +2,5 @@
 *.jl.cov
 *.jl.*.cov
 *.jl.mem
-data/*
+src/data/*
+src/data
