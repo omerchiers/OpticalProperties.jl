@@ -9,7 +9,7 @@ export convert_prop, skin_depth,
 
 # Types
 export OptProp,
-       Model, Bruggeman, MaxwellGarnett,SimpleMixing
+       Model, Bruggeman, MaxwellGarnett,SimpleMixing,
        MaterialFile, Sellmeier,
        Cbn, Sic, Si_cst, Al,
        Au,Au_latella,Cst
@@ -190,7 +190,7 @@ function permittivity(material::MaxwellGarnett,w) :: Complex128
     return epsm*num/den
 end
 
-function permittivity(material::SimpleMixing,w) 
+function permittivity(material::SimpleMixing,w)
     eps1 = permittivity(material.phase1,w)
     eps2 = permittivity(material.phase2,w)
     f    = material.volfrac
