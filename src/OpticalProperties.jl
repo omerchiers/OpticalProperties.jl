@@ -87,7 +87,7 @@ Au_latella() = Au_latella(1.0,0.0)
 
 # Constant permittivity
 struct Cst <: OptProp
-    val :: Complex128
+    val :: Complex{Float64}
 end
 Cst() = Cst(1.0+im*0.0)
 
@@ -210,6 +210,5 @@ function permittivity(material :: Sellmeier, w)
     end
     return eps
 end
-eps_si(x)  = 1+10.6684293./(1-(0.301516485./x).^2)+0.0030434748./(1-(1.13475115./x).^2)+1.54133408./(1-(1104./x).^2)
-eps_sin(x) = 1+3.0249./(1-(0.1353406./x).^2)+40314./(1-(1239.842./x).^2)
+
 end # module
