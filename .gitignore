@@ -2,5 +2,6 @@
 *.jl.cov
 *.jl.*.cov
 *.jl.mem
-src/data/*
-src/data
+src/data/*.htm
+src/data/*.txt
+src/data/*.pptx
