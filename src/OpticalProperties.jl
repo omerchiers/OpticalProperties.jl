@@ -9,7 +9,8 @@ export convert_prop, skin_depth,
 
 # Types
 export OptProp,
-       Model, Bruggeman, MaxwellGarnett,SimpleMixing,
+       Model, Bruggeman, MaxwellGarnett,
+       SimpleMixingPar,SimpleMixingPerp,
        MaterialFile, Sellmeier,
        Cbn, Sic, Si_cst, Al,
        Au,Au_latella,Cst
@@ -50,7 +51,13 @@ struct MaxwellGarnett{T, U , V} <: OptProp
    volfrac  :: V
 end
 
-struct SimpleMixing{T,U,V} <: OptProp
+struct SimpleMixingPar{T,U,V} <: OptProp
+   phase1  :: T
+   phase2  :: U
+   volfrac :: V
+end
+
+struct SimpleMixingPerp{T,U,V} <: OptProp
    phase1  :: T
    phase2  :: U
    volfrac :: V
@@ -190,12 +197,20 @@ function permittivity(material::MaxwellGarnett,w) :: Complex128
     return epsm*num/den
 end
 
-function permittivity(material::SimpleMixing,w)
+function permittivity(material::SimpleMixingPar,w)
     eps1 = permittivity(material.phase1,w)
     eps2 = permittivity(material.phase2,w)
     f    = material.volfrac
     return f*eps1 + (1-f)*eps2
 end
+
+function permittivity(material::SimpleMixingPerp,w)
+    eps1 = permittivity(material.phase1,w)
+    eps2 = permittivity(material.phase2,w)
+    f    = material.volfrac
+    return 1/(f/eps1 + (1-f)/eps2)
+end
+
 
 function permittivity(material :: MaterialFile, w)
     lamb = 2.0*pi*c0/w*1e6 # wavelength in microns
