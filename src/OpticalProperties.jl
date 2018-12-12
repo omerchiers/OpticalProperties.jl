@@ -126,7 +126,7 @@ julia> permittivity(Sic(),1e13)
 function permittivity() end
 
 
-function permittivity(material::Model,w) :: Complex128
+function permittivity(material::Model,w) :: Complex{Float64}
      eps0   = material.eps0
      wp     = material.wp
      w0     = material.w0
@@ -137,7 +137,7 @@ end
 
 
 
-function permittivity(material::Cbn,w) :: Complex128
+function permittivity(material::Cbn,w) :: Complex{Float64}
     eps_fin = 4.46 + 0.0*im
     w_lo    = 2.451e14 # rad/s
     w_to    = 1.985e14 # rad/s
@@ -145,7 +145,7 @@ function permittivity(material::Cbn,w) :: Complex128
     return eps_fin*(w^2-w_lo^2 + im*gamma*w)/(w^2-w_to^2 + im*gamma*w)
 end
 
-function permittivity(material::Sic,w) :: Complex128
+function permittivity(material::Sic,w) :: Complex{Float64}
     eps_fin = 6.7 + 0.0*im
     w_lo    = 1.827e14 # rad/s
     w_to    = 1.495e14 # rad/s
@@ -154,32 +154,32 @@ function permittivity(material::Sic,w) :: Complex128
 end
 
 
-function permittivity(material::Al,w) :: Complex128
+function permittivity(material::Al,w) :: Complex{Float64}
     alum = Model(1.0,2.24e16,0.0,1.22e14)
     return permittivity(alum,w)
 end
 
-function permittivity(material::Au,w) :: Complex128
+function permittivity(material::Au,w) :: Complex{Float64}
     gamma1 = material.a*vf_au/material.mfp
     gold   = Model(9.4,13584.25e12,0.0,109.96e12,gamma1)
     return permittivity(gold,w)
 end
 
-function permittivity(material::Au_latella,w) :: Complex128
+function permittivity(material::Au_latella,w) :: Complex{Float64}
     gamma1 = material.a*vf_au/material.mfp
     gold   = Model(1.0,1.37e16,0.0,5.32e13,gamma1)
     return permittivity(gold,w)
 end
 
-function permittivity(material::Si_cst,w) :: Complex128
+function permittivity(material::Si_cst,w) :: Complex{Float64}
     return 11.7+im*0.0
 end
 
-function permittivity(material::Cst,w) :: Complex128
+function permittivity(material::Cst,w) :: Complex{Float64}
     return material.val
 end
 
-function permittivity(material::Bruggeman,w) :: Complex128
+function permittivity(material::Bruggeman,w) :: Complex{Float64}
     eps1 = permittivity(material.phase1,w)
     eps2 = permittivity(material.phase2,w)
     p    = sqrt(eps1)/sqrt(eps2)
@@ -188,7 +188,7 @@ function permittivity(material::Bruggeman,w) :: Complex128
     return transpose(z*sqrt(eps2)*sqrt(eps1))
 end
 
-function permittivity(material::MaxwellGarnett,w) :: Complex128
+function permittivity(material::MaxwellGarnett,w) :: Complex{Float64}
     epsm = permittivity(material.matrix,w)
     epsp = permittivity(material.particle,w)
     f    = material.volfrac
