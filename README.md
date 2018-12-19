@@ -11,10 +11,23 @@ This is very much work in progress.
 The API is not very consistent yet. Especially the way materials are exported.
 Some are exported as singleton types (Al(),Au(),Sic()), others as constants (Cu).
 
+## Installation
+You need Julia version 0.6.4 or higher.
+
+To install on julia 0.7 or higher, enter the Pkg mode by typing ]
+and then
+
+```julia
+(v1.0)> add git@git-cethil.insa-lyon.fr:omerchiers/opticalproperties.jl.git
+```
 
 ## Examples
-
+This is an example of the usage for gold. The functions presented take as arguments the material, here gold and the frequency in rad/s.
 ```julia
 julia> permittivity(Au(),1e15)
 -172.92729201753394 + 20.04870903024803im
+julia> refractive_index(Au(),1e15)
+0.7610244413149028 + 13.17218471696372im
+julia> skin_depth(Au(),1e15)
+2.2759509105115573e-8
 ```
