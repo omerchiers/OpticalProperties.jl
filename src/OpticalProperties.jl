@@ -13,7 +13,8 @@ export OptProp,
        SimpleMixingPar,SimpleMixingPerp,
        MaterialFile, Sellmeier,
        Cbn, Sic, Si_cst, Al,
-       Au,Au_latella,Cst
+       Au,Au_latella,Cst,
+       Si_n_doped,Si_p_doped
 
 # Constants
 export Cu,SiO2,Si,SiN
@@ -135,7 +136,12 @@ function permittivity(material::Model,w) :: Complex{Float64}
     return  eps0 + wp^2/(w0*w0 - w*w - im*w*(gamma0+gamma1))
 end
 
-
+"""
+Instances for doped Silicon. N varies between 3e19 and 5e20 cm^{-3}
+rho is the dc resistivity
+"""
+Si_n_doped(m,N,rho) = Model(11.7,N*electron^2/(0.27*m0)/epsilon0,0.0,N*electron^2*rho/(0.27*m0),0.0)
+Si_p_doped(m,N,rho) = Model(11.7,N*electron^2/(0.34*m0)/epsilon0,0.0,N*electron^2*rho/(0.34*m0),0.0)
 
 function permittivity(material::Cbn,w) :: Complex{Float64}
     eps_fin = 4.46 + 0.0*im
