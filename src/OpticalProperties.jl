@@ -1,5 +1,3 @@
-__precompile__(false)
-
 module OpticalProperties
 
 using MyPhysicalConstants, Interpolations
