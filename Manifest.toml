@@ -55,6 +55,13 @@ uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 [[Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
+[[MyPhysicalConstants]]
+git-tree-sha1 = "621f80d12ce7b03265ca77eadd459c14b8d60e9c"
+repo-rev = "master"
+repo-url = "http://git-cethil.insa-lyon.fr/omerchiers/myphysicalconstants.jl"
+uuid = "03bd0ab0-1009-11e9-287f-65bf770f7c3e"
+version = "0.1.0"
+
 [[OffsetArrays]]
 deps = ["DelimitedFiles", "Test"]
 git-tree-sha1 = "7d1442cb06fbfbc4fea936c3c56b38daffd22d3b"
