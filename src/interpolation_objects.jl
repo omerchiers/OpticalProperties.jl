@@ -23,9 +23,9 @@ const SiO2 = MaterialFile(itp_sio2_re,itp_sio2_im)
 # Resitivity n-Si
 knots = (nSi_data[:,1],)
 const itp_nSi = interpolate(knots, nSi_data[:,2], Gridded(Linear()))
-const nSi = ResistivityFile(itp_nSi)
+const nSi_sze = ResistivityFile(itp_nSi)
 
 # Resitivity p-Si
 knots = (pSi_data[:,1],)
 const itp_pSi = interpolate(knots, pSi_data[:,2], Gridded(Linear()))
-const pSi = ResistivityFile(itp_pSi)
+const pSi_sze = ResistivityFile(itp_pSi)
