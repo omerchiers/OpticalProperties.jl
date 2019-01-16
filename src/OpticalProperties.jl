@@ -1,25 +1,32 @@
 module OpticalProperties
 
-using MyPhysicalConstants, Interpolations
+using MyPhysicalConstants, Interpolations, Parameters
 
 # Functions
 export convert_prop, skin_depth,
-       permittivity, refractive_index,eps_si,eps_sin
+       permittivity, refractive_index,eps_si,eps_sin,
+       resistivity
 
 
 # Types
-export OptProp,
+export OptProp, ElectricalProperties,
        Model, Bruggeman, MaxwellGarnett,
        SimpleMixingPar,SimpleMixingPerp,
        MaterialFile, Sellmeier,
+       ResistivityFile, MobilityModel,
        Cbn, Sic, Si_cst, Al,
        Au,Au_latella,Cst,
        Si_n_doped,Si_p_doped
 
 # Constants
-export Cu,SiO2,Si,SiN
+export Cu,SiO2,Si,SiN,
+       pSi_masetti,nSi_masetti,
+       pSi_sze,nSi_sze
 
-abstract type OptProp end
+abstract type AbstractMaterial end
+abstract type OptProp <: AbstractMaterial end
+abstract type ElectricalProperties <: AbstractMaterial end
+
 
 # Generic models
 struct Model <: OptProp
@@ -70,6 +77,21 @@ struct MaterialFile{T,U} <: OptProp
     im :: U
 end
 
+struct ResistivityFile{T} <: ElectricalProperties
+    rho :: T
+end
+
+struct MobilityModel{T} <: ElectricalProperties
+    μ1   :: T
+    μ2   :: T
+    μmax :: T
+    cr   :: T
+    cs   :: T
+    α    :: T
+    β    :: T
+    pc   :: T
+    charge :: T
+end
 
 
 # Dielectrics
@@ -105,9 +127,50 @@ refractive_index(material :: OptProp, w) = sqrt(permittivity(material,w))
 # Skin depth
 skin_depth(material :: OptProp , w ) = c0/imag(refractive_index(material,w))/w
 
-
 # Create interpolations
 include("interpolation_objects.jl")
+
+"""
+    mobility(material,N)
+
+Compute the electric mobility for a material in cm^2 V^{-1} s^{-1}.
+
+# Arguments
+* `material :: MobilityModel` : the material for which you need the resisitivity
+* `N :: Real` : electron or hole concentration in cm^{-3}
+
+# Example
+```julia
+julia> mobility(nSi,1e15)
+4.593579841190333
+```
+"""
+
+function mobility(material :: ElectricalProperties, N)
+    @unpack μ1, μ2, μmax, cr, cs, α, β, pc, charge = material
+    return μ1*exp(-charge*pc/N) + (μmax - (1.0 - charge)*μ1)/(1 + (N/cr)^α) - μ2/(1 + (cs/N)^β)
+end
+
+nSi_masetti = MobilityModel(68.5,56.1,1414.0,9.2e16,3.41e20,0.711,1.98,0.0,0.0)
+pSi_masetti = MobilityModel(44.9,29.0,470.5,2.23e17,6.10e20,0.719,2.0,9.23e16,1.0)
+
+"""
+    resistivity(material,N)
+
+Compute the electric resistivity for a material in Ohm cm.
+
+# Arguments
+* `material :: ResistivityFile` : the material for which you need the resisitivity
+* `N :: Real` : impurity concentration in cm^{-3}
+
+# Example
+```julia
+julia> resistivity(nSi,1e15)
+4.593579841190333
+```
+"""
+resistivity(material :: ResistivityFile, N) = material.rho(N)
+resistivity(material :: ElectricalProperties, N) = 1/(N*electron*mobility(material,N))
 
 """
     permittivity(material,w)
@@ -140,8 +203,8 @@ end
 Instances for doped Silicon. N varies between 3e19 and 5e20 cm^{-3}
 rho is the dc resistivity
 """
-Si_n_doped(m,N,rho) = Model(11.7,N*electron^2/(0.27*m0)/epsilon0,0.0,N*electron^2*rho/(0.27*m0),0.0)
-Si_p_doped(m,N,rho) = Model(11.7,N*electron^2/(0.34*m0)/epsilon0,0.0,N*electron^2*rho/(0.34*m0),0.0)
+Si_n_doped(material::ElectricalProperties, N) = Model(11.7,sqrt(N*1e6*electron^2/(0.27*m0)/epsilon0),0.0,N*1e4*electron^2*resistivity(material,N)/(0.27*m0),0.0)
+Si_p_doped(material::ElectricalProperties,N) = Model(11.7,sqrt(N*1e6*electron^2/(0.34*m0)/epsilon0),0.0,N*1e4*electron^2*resistivity(material,N)/(0.34*m0),0.0)
 
 function permittivity(material::Cbn,w) :: Complex{Float64}
     eps_fin = 4.46 + 0.0*im
@@ -231,5 +294,7 @@ function permittivity(material :: Sellmeier, w)
     end
     return eps
 end
+
+
 
 end # module
