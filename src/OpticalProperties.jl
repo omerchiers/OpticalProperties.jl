@@ -1,6 +1,6 @@
 module OpticalProperties
 
-using MyPhysicalConstants, Interpolations, Parameters
+using MyPhysicalConstants, Interpolations, Parameters, QuadGK
 
 # Functions
 export convert_prop, skin_depth,
@@ -129,6 +129,8 @@ skin_depth(material :: OptProp , w ) = c0/imag(refractive_index(material,w))/w
 
 # Create interpolations
 include("interpolation_objects.jl")
+include("SiN.jl")
+
 
 """
     mobility(material,N)
