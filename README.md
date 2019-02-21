@@ -18,6 +18,7 @@ To install on julia 0.7 or higher, enter the Pkg mode by typing ]
 and then
 
 ```julia
+(v1.0)> add git@git-cethil.insa-lyon.fr:omerchiers/MyPhysicalConstants.jl.git
 (v1.0)> add git@git-cethil.insa-lyon.fr:omerchiers/opticalproperties.jl.git
 ```
 
