@@ -285,7 +285,7 @@ end
 
 function permittivity(material :: MaterialFile, w)
     lamb = 2.0*pi*c0/w*1e6 # wavelength in microns
-    return (material.re[lamb]^2 - material.im[lamb]^2) + im*2*material.im[lamb]*material.re[lamb]
+    return (material.re(lamb)^2 - material.im(lamb)^2) + im*2*material.im(lamb)*material.re(lamb)
 end
 
 function permittivity(material :: Sellmeier, w)
