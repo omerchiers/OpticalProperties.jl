@@ -15,12 +15,19 @@ Some are exported as singleton types (Al(),Au(),Sic()), others as constants (Cu)
 You need Julia version 0.6.4 or higher.
 
 To install on julia 0.7 or higher, enter the Pkg mode by typing ]
-and then
+and then when installing from gitlab
 
 ```julia
-(v1.0)> add git@git-cethil.insa-lyon.fr:omerchiers/MyPhysicalConstants.jl.git
-(v1.0)> add git@git-cethil.insa-lyon.fr:omerchiers/opticalproperties.jl.git
+(v1.0)> https://git-cethil.insa-lyon.fr/omerchiers/myphysicalconstants.jl
+(v1.0)> https://git-cethil.insa-lyon.fr/omerchiers/opticalproperties.jl
 ```
+or if you use the github repository
+
+```julia
+(v1.0)> add https://github.com/omerchiers/MyPhysicalProperties.jl
+(v1.0)> add https://github.com/omerchiers/OpticalProperties.jl
+```
+
 
 ## Examples
 This is an example of the usage for gold. The functions presented take as arguments the material, here gold and the frequency in rad/s.
