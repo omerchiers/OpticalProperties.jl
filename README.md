@@ -24,7 +24,7 @@ and then when installing from gitlab
 or if you use the github repository
 
 ```julia
-(v1.0)> add https://github.com/omerchiers/MyPhysicalProperties.jl
+(v1.0)> add https://github.com/omerchiers/MyPhysicalConstants.jl
 (v1.0)> add https://github.com/omerchiers/OpticalProperties.jl
 ```
 
