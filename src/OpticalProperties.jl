@@ -10,7 +10,8 @@ export convert_prop, skin_depth,
 
 # Types
 export OptProp, ElectricalProperties,
-       Model, Bruggeman, MaxwellGarnett,
+       Model, Polariton,
+       Bruggeman, MaxwellGarnett,
        SimpleMixingPar,SimpleMixingPerp,
        MaterialFile, Sellmeier,
        ResistivityFile, MobilityModel,
@@ -21,7 +22,8 @@ export OptProp, ElectricalProperties,
 # Constants
 export Cu,SiO2,Si,SiN,
        pSi_masetti,nSi_masetti,
-       pSi_sze,nSi_sze
+       pSi_sze,nSi_sze,
+       SiC,cBN
 
 abstract type AbstractMaterial end
 abstract type OptProp <: AbstractMaterial end
@@ -37,6 +39,13 @@ struct Model <: OptProp
     gamma1 :: Float64
 end
 Model(eps0,wp,w0,gamma0) = Model(eps0,wp,w0,gamma0,0.0)
+
+struct Polariton{T} <: OptProp
+    eps_fin :: T
+    w_lo    :: T # rad/s
+    w_to    :: T # rad/s
+    gamma   :: T # rad/s
+end
 
 struct Sellmeier{T} <: OptProp
     values :: Array{Tuple{T,T},1}
@@ -200,6 +209,18 @@ function permittivity(material::Model,w) :: Complex{Float64}
      gamma1 = material.gamma1
     return  eps0 + wp^2/(w0*w0 - w*w - im*w*(gamma0+gamma1))
 end
+
+function permittivity(material::Polariton,w) :: Complex{Float64}
+    eps_fin = material.eps_fin
+    w_lo    = material.w_lo
+    w_to    = material.w_to
+    gamma   = material.gamma
+    return  eps_fin*(w^2-w_lo^2 + im*gamma*w)/(w^2-w_to^2 + im*gamma*w)
+end
+
+SiC = Polariton(6.7,1.827e14,1.495e14,8.971e11)
+cBN = Polariton(4.46,2.451e14,1.985e14,9.934e11)
+
 
 """
 Instances for doped Silicon. N varies between 3e19 and 5e20 cm^{-3}
