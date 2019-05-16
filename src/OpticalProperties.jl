@@ -10,20 +10,21 @@ export convert_prop, skin_depth,
 
 # Types
 export OptProp, ElectricalProperties,
-       Model, Polariton,
+       Model, Polariton,Cst,
        Bruggeman, MaxwellGarnett,
        SimpleMixingPar,SimpleMixingPerp,
        MaterialFile, Sellmeier,
        ResistivityFile, MobilityModel,
-       Cbn, Sic, Si_cst, Al,
-       Au,Au_latella,Cst,
+       Cbn, Sic, Al,
+       Au,Au_latella,
+       Au2,Au_latella2,
        Si_n_doped,Si_p_doped
 
 # Constants
-export Cu,SiO2,Si,SiN,
+export Cu,SiO2,Si,SiN,Al2
        pSi_masetti,nSi_masetti,
        pSi_sze,nSi_sze,
-       SiC,cBN
+       SiC,cBN,Si_cst
 
 abstract type AbstractMaterial end
 abstract type OptProp <: AbstractMaterial end
@@ -40,12 +41,23 @@ struct Model <: OptProp
 end
 Model(eps0,wp,w0,gamma0) = Model(eps0,wp,w0,gamma0,0.0)
 
+
+# Gold
+gamma1(mfp=1.0,a=0.0) = a*vf_au/mfp
+Au2(mfp=1.0,a=0) = Model(9.4,13584.25e12,0.0,109.96e12,gamma1(mfp,a))
+Au_latella2(mfp,a) = Model(1.0,1.37e16,0.0,5.32e13,gamma1(mfp,a))
+
+#Aluminium
+const Al2 = Model(1.0,2.24e16,0.0,1.22e14)
+
 struct Polariton{T} <: OptProp
     eps_fin :: T
     w_lo    :: T # rad/s
     w_to    :: T # rad/s
     gamma   :: T # rad/s
 end
+SiC = Polariton(6.7,1.827e14,1.495e14,8.971e11)
+cBN = Polariton(4.46,2.451e14,1.985e14,9.934e11)
 
 struct Sellmeier{T} <: OptProp
     values :: Array{Tuple{T,T},1}
@@ -55,7 +67,18 @@ const Si  = Sellmeier([(10.6684293 , 0.301516485), (0.0030434748 , 1.13475115), 
 const SiN = Sellmeier([(3.0249 , 0.1353406), (40314.0 , 1239.842)])
 
 
-# Effective medium models
+# Constant permittivity
+struct Cst <: OptProp
+    val :: Complex{Float64}
+end
+
+Cst()  = Cst(1.0+im*0.0)
+const Vacuum = Cst()
+const Si_cst = Cst(11.7 + im*0.0)
+
+
+
+# Types for effective medium models
 struct Bruggeman{T, U , V} <: OptProp
    phase1  :: T
    phase2  :: U
@@ -102,44 +125,16 @@ struct MobilityModel{T} <: ElectricalProperties
     charge :: T
 end
 
+const nSi_masetti = MobilityModel(68.5,56.1,1414.0,9.2e16,3.41e20,0.711,1.98,0.0,0.0)
+const pSi_masetti = MobilityModel(44.9,29.0,470.5,2.23e17,6.10e20,0.719,2.0,9.23e16,1.0)
 
-# Dielectrics
-struct Sic <: OptProp end
-struct Cbn <: OptProp end
-struct Si_cst <: OptProp end
-
-# Conductors
-struct Al <: OptProp end
-struct Au <: OptProp
-    mfp :: Float64
-    a   :: Float64
-end
-Au(mfp) = Au(mfp,1.0)
-Au() = Au(1.0,0.0)
-
-struct Au_latella{T <: Real} <: OptProp
-    mfp :: T
-    a   :: T
-end
-Au_latella(mfp) = Au_latella(mfp,1.0)
-Au_latella() = Au_latella(1.0,0.0)
-
-# Constant permittivity
-struct Cst <: OptProp
-    val :: Complex{Float64}
-end
-Cst() = Cst(1.0+im*0.0)
-
-# Refractive index
-refractive_index(material :: OptProp, w) = sqrt(permittivity(material,w))
-
-# Skin depth
-skin_depth(material :: OptProp , w ) = c0/imag(refractive_index(material,w))/w
 
 # Create interpolations
 include("interpolation_objects.jl")
 include("SiN.jl")
 
+#To be deprecated
+include("singleton_types.jl")
 
 """
     mobility(material,N)
@@ -162,8 +157,7 @@ function mobility(material :: ElectricalProperties, N)
     return μ1*exp(-charge*pc/N) + (μmax - (1.0 - charge)*μ1)/(1 + (N/cr)^α) - μ2/(1 + (cs/N)^β)
 end
 
-nSi_masetti = MobilityModel(68.5,56.1,1414.0,9.2e16,3.41e20,0.711,1.98,0.0,0.0)
-pSi_masetti = MobilityModel(44.9,29.0,470.5,2.23e17,6.10e20,0.719,2.0,9.23e16,1.0)
+
 
 """
     resistivity(material,N)
@@ -183,6 +177,8 @@ julia> resistivity(nSi,1e15)
 resistivity(material :: ResistivityFile, N) = material.rho(N)
 resistivity(material :: ElectricalProperties, N) = 1/(N*electron*mobility(material,N))
 
+
+
 """
     permittivity(material,w)
 
@@ -198,7 +194,6 @@ julia> permittivity(Sic(),1e13)
 6.805820438080644 + 0.002847538251166107im
 ```
 """
-function permittivity() end
 
 
 function permittivity(material::Model,w) :: Complex{Float64}
@@ -218,58 +213,10 @@ function permittivity(material::Polariton,w) :: Complex{Float64}
     return  eps_fin*(w^2-w_lo^2 + im*gamma*w)/(w^2-w_to^2 + im*gamma*w)
 end
 
-SiC = Polariton(6.7,1.827e14,1.495e14,8.971e11)
-cBN = Polariton(4.46,2.451e14,1.985e14,9.934e11)
-
-
-"""
-Instances for doped Silicon. N varies between 3e19 and 5e20 cm^{-3}
-rho is the dc resistivity
-"""
-Si_n_doped(material::ElectricalProperties, N) = Model(11.7,sqrt(N*1e6*electron^2/(0.27*m0)/epsilon0),0.0,N*1e4*electron^2*resistivity(material,N)/(0.27*m0),0.0)
-Si_p_doped(material::ElectricalProperties,N) = Model(11.7,sqrt(N*1e6*electron^2/(0.34*m0)/epsilon0),0.0,N*1e4*electron^2*resistivity(material,N)/(0.34*m0),0.0)
-
-function permittivity(material::Cbn,w) :: Complex{Float64}
-    eps_fin = 4.46 + 0.0*im
-    w_lo    = 2.451e14 # rad/s
-    w_to    = 1.985e14 # rad/s
-    gamma   = 9.934e11 # rad/s
-    return eps_fin*(w^2-w_lo^2 + im*gamma*w)/(w^2-w_to^2 + im*gamma*w)
-end
-
-function permittivity(material::Sic,w) :: Complex{Float64}
-    eps_fin = 6.7 + 0.0*im
-    w_lo    = 1.827e14 # rad/s
-    w_to    = 1.495e14 # rad/s
-    gamma   = 8.971e11 # rad/s
-    return eps_fin*(w^2-w_lo^2 + im*gamma*w)/(w^2-w_to^2 + im*gamma*w)
-end
-
-
-function permittivity(material::Al,w) :: Complex{Float64}
-    alum = Model(1.0,2.24e16,0.0,1.22e14)
-    return permittivity(alum,w)
-end
-
-function permittivity(material::Au,w) :: Complex{Float64}
-    gamma1 = material.a*vf_au/material.mfp
-    gold   = Model(9.4,13584.25e12,0.0,109.96e12,gamma1)
-    return permittivity(gold,w)
-end
-
-function permittivity(material::Au_latella,w) :: Complex{Float64}
-    gamma1 = material.a*vf_au/material.mfp
-    gold   = Model(1.0,1.37e16,0.0,5.32e13,gamma1)
-    return permittivity(gold,w)
-end
-
-function permittivity(material::Si_cst,w) :: Complex{Float64}
-    return 11.7+im*0.0
-end
-
 function permittivity(material::Cst,w) :: Complex{Float64}
     return material.val
 end
+
 
 function permittivity(material::Bruggeman,w) :: Complex{Float64}
     eps1 = permittivity(material.phase1,w)
@@ -318,6 +265,11 @@ function permittivity(material :: Sellmeier, w)
     return eps
 end
 
+# Refractive index
+refractive_index(material :: OptProp, w) = sqrt(permittivity(material,w))
+
+# Skin depth
+skin_depth(material :: OptProp , w ) = c0/imag(refractive_index(material,w))/w
 
 
 end # module
