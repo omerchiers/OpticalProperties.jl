@@ -15,13 +15,12 @@ export OptProp, ElectricalProperties,
        SimpleMixingPar,SimpleMixingPerp,
        MaterialFile, Sellmeier,
        ResistivityFile, MobilityModel,
-       Cbn, Sic, Al,
-       Au,Au_latella,
+       Cbn, Sic,
        Si_n_doped,Si_p_doped
 
 # Constants
 export Cu,SiO2,Si,SiN,Vacuum,
-       Au2,Au_latella2,Al2,
+       Au,Au_latella,Al,
        pSi_masetti,nSi_masetti,
        pSi_sze,nSi_sze,
        SiC,cBN,Si_cst
@@ -41,14 +40,13 @@ struct Model <: OptProp
 end
 Model(eps0,wp,w0,gamma0) = Model(eps0,wp,w0,gamma0,0.0)
 
-
+gamma1(mfp=1.0,a=0.0; vf=0.0) = a*vf/mfp
 # Gold
-gamma1(mfp=1.0,a=0.0) = a*vf_au/mfp
-Au2(mfp=1.0,a=0) = Model(9.4,13584.25e12,0.0,109.96e12,gamma1(mfp,a))
-Au_latella2(mfp,a) = Model(1.0,1.37e16,0.0,5.32e13,gamma1(mfp,a))
+Au(mfp=1.0,a=0.0)   = Model(9.4,13584.25e12,0.0,109.96e12,gamma1(mfp,a;vf=vf_au))
+Au_latella(mfp,a) = Model(1.0,1.37e16,0.0,5.32e13,gamma1(mfp,a;vf=vf_au))
 
 #Aluminium
-const Al2 = Model(1.0,2.24e16,0.0,1.22e14)
+Al(mfp=1.0,a=0) = Model(1.0,2.24e16,0.0,1.22e14,gamma1(mfp,a ; vf=vf_ag))
 
 struct Polariton{T} <: OptProp
     eps_fin :: T
