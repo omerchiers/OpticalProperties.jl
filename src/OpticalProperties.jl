@@ -21,7 +21,7 @@ export OptProp, ElectricalProperties,
        Si_n_doped,Si_p_doped
 
 # Constants
-export Cu,SiO2,Si,SiN,Al2
+export Cu,SiO2,Si,SiN,Al2,Vacuum,
        pSi_masetti,nSi_masetti,
        pSi_sze,nSi_sze,
        SiC,cBN,Si_cst
