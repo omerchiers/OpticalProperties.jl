@@ -17,11 +17,11 @@ export OptProp, ElectricalProperties,
        ResistivityFile, MobilityModel,
        Cbn, Sic, Al,
        Au,Au_latella,
-       Au2,Au_latella2,
        Si_n_doped,Si_p_doped
 
 # Constants
-export Cu,SiO2,Si,SiN,Al2,Vacuum,
+export Cu,SiO2,Si,SiN,Vacuum,
+       Au2,Au_latella2,Al2,
        pSi_masetti,nSi_masetti,
        pSi_sze,nSi_sze,
        SiC,cBN,Si_cst
