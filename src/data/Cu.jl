@@ -1,6 +1,6 @@
 # Cu_Lorentz-Drude_0.207-12.4µm (Johnson & Christy)
 # wavelength (micron) Re(n) Im(n)
-cu_data = [0.20664 1.1018 1.8654
+const cu_data = [0.20664 1.1018 1.8654
 0.21094 1.1579 1.8851
 0.21532 1.2145 1.8982
 0.2198 1.2707 1.9041
