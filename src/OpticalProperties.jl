@@ -127,6 +127,7 @@ const nSi_masetti = MobilityModel(68.5,56.1,1414.0,9.2e16,3.41e20,0.711,1.98,0.0
 const pSi_masetti = MobilityModel(44.9,29.0,470.5,2.23e17,6.10e20,0.719,2.0,9.23e16,1.0)
 
 
+
 # Create interpolations
 include("interpolation_objects.jl")
 include("SiN.jl")
@@ -175,6 +176,13 @@ julia> resistivity(nSi,1e15)
 resistivity(material :: ResistivityFile, N) = material.rho(N)
 resistivity(material :: ElectricalProperties, N) = 1/(N*electron*mobility(material,N))
 
+"""
+Instances of doped Silicon. N varies between 3e19 and 5e20 cm^{-3}
+rho is the dc resistivity
+"""
+
+Si_n_doped(material::ElectricalProperties, N) = Model(11.7,sqrt(N*1e6*electron^2/(0.27*m0)/epsilon0),0.0,N*1e4*electron^2*resistivity(material,N)/(0.27*m0),0.0)
+Si_p_doped(material::ElectricalProperties,N) = Model(11.7,sqrt(N*1e6*electron^2/(0.34*m0)/epsilon0),0.0,N*1e4*electron^2*resistivity(material,N)/(0.34*m0),0.0)
 
 
 """
