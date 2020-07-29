@@ -1,8 +1,9 @@
-.gitignore
 *.jl.cov
 *.jl.*.cov
 *.jl.mem
+Manifest.toml
 src/data/*.htm
 src/data/*.txt
 src/data/*.pptx
 src/data/*.csv
+src/data/SiO2_T
