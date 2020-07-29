@@ -20,10 +20,12 @@ export OptProp, ElectricalProperties,
 
 # Constants
 export Cu,SiO2,Si,SiN,Vacuum,
-       Au,Au_latella,Al,
+       Au,Au_latella,Al,W,Ti,TiW,TiW_v2
        pSi_masetti,nSi_masetti,
        pSi_sze,nSi_sze,
-       SiC,cBN,Si_cst
+       SiC,cBN,Si_cst,
+       SiO2_416, SiO2_511, SiO2_626,
+       SiO2_691, SiO2_789
 
 abstract type AbstractMaterial end
 abstract type OptProp <: AbstractMaterial end
@@ -42,11 +44,22 @@ Model(eps0,wp,w0,gamma0) = Model(eps0,wp,w0,gamma0,0.0)
 
 gamma1(mfp=1.0,a=0.0; vf=0.0) = a*vf/mfp
 # Gold
-Au(mfp=1.0,a=0.0)   = Model(9.4,13584.25e12,0.0,109.96e12,gamma1(mfp,a;vf=vf_au))
+Au(mfp=1.0,a=0.0) = Model(9.4,13584.25e12,0.0,109.96e12,gamma1(mfp,a;vf=vf_au))
 Au_latella(mfp,a) = Model(1.0,1.37e16,0.0,5.32e13,gamma1(mfp,a;vf=vf_au))
 
 #Aluminium
-Al(mfp=1.0,a=0) = Model(1.0,2.24e16,0.0,1.22e14,gamma1(mfp,a ; vf=vf_ag))
+Al(mfp=1.0,a=0.0) = Model(1.0,2.24e16,0.0,1.22e14,gamma1(mfp,a ; vf=vf_ag))
+
+#Tungsten: fitted from data obtained from Ordal et al.
+W = Model(6.0, 6.2e15, 0.0, 2.6e14,0.0)
+
+#Titanium: fitted from data obtained from Ordal et al.
+Ti = Model(1.0, 3.82e15, 0.0, 719.6e11, 0.0)
+
+#Titanium Tungsten: obtained from Varpula et al.
+TiW    = Model(1.0,sqrt(7.75e5*1e15/8.85e-12), 0.0, 1.0e15, 0.0)
+TiW_v2 = Model(1.0,sqrt(5.0e5*1e15/8.85e-12), 0.0, 1.0e15, 0.0)
+
 
 struct Polariton{T} <: OptProp
     eps_fin :: T
@@ -102,9 +115,18 @@ struct SimpleMixingPerp{T,U,V} <: OptProp
 end
 
 # From file containing measurements
-struct MaterialFile{T,U} <: OptProp
-    re :: T
-    im :: U
+struct MaterialFile{T, U, V} <: OptProp
+    re :: V
+    im :: V
+end
+
+
+# Outer constructor to dispatch on options
+MaterialFile(T, U, re :: V, im :: V) where V = MaterialFile{T,U,V}(re,im)
+
+function Base.show(io:: IO, mf :: MaterialFile{T,U}) where {T,U}
+    println(io, "property: $T")
+    println(io, "parameter: $U")
 end
 
 struct ResistivityFile{T} <: ElectricalProperties
@@ -257,9 +279,13 @@ function permittivity(material::SimpleMixingPerp,w)
 end
 
 
-function permittivity(material :: MaterialFile, w)
+function permittivity(material :: MaterialFile{:refr_ind, :wavelength}, w)
     lamb = 2.0*pi*c0/w*1e6 # wavelength in microns
     return (material.re(lamb)^2 - material.im(lamb)^2) + im*2*material.im(lamb)*material.re(lamb)
+end
+
+function permittivity(material :: MaterialFile{:permittivity, :frequency}, w)
+    return material.re(w) + im*material.im(w)
 end
 
 function permittivity(material :: Sellmeier, w)
