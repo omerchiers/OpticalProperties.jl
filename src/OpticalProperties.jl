@@ -23,9 +23,7 @@ export Cu,SiO2,Si,SiN,Vacuum,
        Au,Au_latella,Al,W,Ti,TiW,TiW_v2
        pSi_masetti,nSi_masetti,
        pSi_sze,nSi_sze,
-       SiC,cBN,Si_cst,
-       SiO2_416, SiO2_511, SiO2_626,
-       SiO2_691, SiO2_789
+       SiC,cBN,Si_cst
 
 abstract type AbstractMaterial end
 abstract type OptProp <: AbstractMaterial end
