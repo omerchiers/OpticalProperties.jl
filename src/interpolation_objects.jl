@@ -2,7 +2,6 @@
 # Material files
 include("./data/Cu.jl")
 include("./data/SiO2.jl")
-include("./data/SiO2_T.jl")
 include("./data/resistivity_n-Si.jl")
 include("./data/resistivity_p-Si.jl")
 
