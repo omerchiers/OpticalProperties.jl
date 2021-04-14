@@ -30,6 +30,7 @@ abstract type ElectricalProperties <: AbstractMaterial end
 
 
 # Generic models
+
 struct Model <: OptProp
     eps0   :: Float64
     wp     :: Float64
@@ -57,7 +58,7 @@ const Ti = Model(1.0, 3.82e15, 0.0, 719.6e11, 0.0)
 const TiW    = Model(1.0,sqrt(7.75e5*1e15/8.85e-12), 0.0, 1.0e15, 0.0)
 const TiW_v2 = Model(1.0,sqrt(5.0e5*1e15/8.85e-12), 0.0, 1.0e15, 0.0)
 
-const TiN = Model(1.0,sqrt(7.57e5*1e15/8.85e-12), 0.0, 1.5e15, 0.0)
+const TiN = Model(1.0,sqrt(7.57e5/1.5e-15/8.85e-12), 0.0, 1.5e15, 0.0)
 
 
 struct Polariton{T} <: OptProp
@@ -217,7 +218,7 @@ Compute the dielectric permittivity for a material.
 
 # Example
 ```julia
-julia> permittivity(Sic(),1e13)
+julia> permittivity(SiC,1e13)
 6.805820438080644 + 0.002847538251166107im
 ```
 """
