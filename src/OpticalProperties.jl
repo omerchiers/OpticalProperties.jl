@@ -109,11 +109,7 @@ function permittivity(model :: DrudeLorentzSerie{T}, w) where T
         ϵ += susceptibility(term, w) 
     end
     return ϵ 
-end
-
-
-end
-  
+end  
 
 
 struct Sellmeier{T} <: OptProp
