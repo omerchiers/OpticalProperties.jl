@@ -30,7 +30,6 @@ abstract type ElectricalProperties <: AbstractMaterial end
 
 
 # Generic models
-
 struct Model <: OptProp
     eps0   :: Float64
     wp     :: Float64
@@ -70,6 +69,52 @@ struct Polariton{T} <: OptProp
 end
 SiC = Polariton(6.7,1.827e14,1.495e14,8.971e11)
 cBN = Polariton(4.46,2.451e14,1.985e14,9.934e11)
+
+
+struct LorentzTerm{T} <: OptProp
+    f      :: T
+    wp     :: T
+    w0     :: T
+    gamma0 :: T
+end
+
+struct DrudeTerm{T} <: OptProp
+    wp     :: T
+    gamma0 :: T
+    gamma1 :: T
+end
+
+struct DrudeLorentzSerie{T} <: OptProp
+    eps0    :: T
+    drude   :: DrudeTerm{T}
+    lorentz :: Vector{LorentzTerm{T}}
+end
+
+
+function susceptibility(model :: DrudeTerm, w)
+    @unpack wp,gamma0, gamma1 = model
+    return wp^2/(w*(w + im*(gamma0+gamma1)))
+end  
+
+function susceptibility(model :: LorentzTerm, w)
+    @unpack f, wp, gamma0 = model
+    return f*wp^2/(w0^2 - w^2 - im*w*gamma0)
+end    
+
+
+function permittivity(model :: DrudeLorentzSerie{T}, w) where T
+    @unpack eps0, drude, lorentz = model
+    ϵ = eps0 - susceptibility(drude, w) 
+    for term in model.lorentz
+        ϵ += susceptibility(term, w) 
+    end
+    return ϵ 
+end
+
+
+end
+  
+
 
 struct Sellmeier{T} <: OptProp
     values :: Array{Tuple{T,T},1}
