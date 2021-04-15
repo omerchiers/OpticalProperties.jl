@@ -48,17 +48,18 @@ Au_latella(mfp,a) = Model(1.0,1.37e16,0.0,5.32e13,gamma1(mfp,a;vf=vf_au))
 #Aluminium
 Al(mfp=1.0,a=0.0) = Model(1.0,2.24e16,0.0,1.22e14,gamma1(mfp,a ; vf=vf_ag))
 
-#Tungsten: fitted from data obtained from Ordal et al.
+"Drude model of Tungsten: fitted from data obtained from Ordal et al."
 const W = Model(6.0, 6.2e15, 0.0, 2.6e14,0.0)
 
-#Titanium: fitted from data obtained from Ordal et al.
+"Drude model of Titanium: fitted from data obtained from Ordal et al."
 const Ti = Model(1.0, 3.82e15, 0.0, 719.6e11, 0.0)
 
-#Titanium Tungsten: obtained from Varpula et al.
+"Drude model of Titanium Tungsten: obtained from Varpula et al."
 const TiW    = Model(1.0,sqrt(7.75e5*1e15/8.85e-12), 0.0, 1.0e15, 0.0)
 const TiW_v2 = Model(1.0,sqrt(5.0e5*1e15/8.85e-12), 0.0, 1.0e15, 0.0)
 
-const TiN = Model(1.0,sqrt(7.57e5/1.5e-15/8.85e-12), 0.0, 1.5e15, 0.0)
+"Drude model of Titanium Nitride obtained from Varpula et al."
+const TiN = Model(1.0,sqrt(7.57e5/1.5e-15/8.85e-12), 0.0, 1.0/(1.5e-15), 0.0)
 
 
 struct Polariton{T} <: OptProp
