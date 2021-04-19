@@ -80,7 +80,7 @@ end
 
 function susceptibility(model :: LorentzTerm, w)
     @unpack f, wp, w0, gamma0 = model
-    return f*wp^2/(w0^2 - w^2 - im*w*gamma0)
+    return f*wp^2/(w^2 - w0^2 + im*w*gamma0)
 end    
 
 
