@@ -78,11 +78,25 @@ struct LorentzTerm{T} <: OptProp
     gamma0 :: T
 end
 
+function susceptibility(model :: LorentzTerm, w)
+    @unpack f, wp, w0, gamma0 = model
+    return f*wp^2/(w0^2 - w^2 - im*w*gamma0)
+end    
+
+
 struct DrudeTerm{T} <: OptProp
     wp     :: T
     gamma0 :: T
     gamma1 :: T
 end
+
+DrudeTerm(wp, gamma0) = DrudeTerm(wp, gamma0, 0.0)
+
+function susceptibility(model :: DrudeTerm, w)
+    @unpack wp,gamma0, gamma1 = model
+    return wp^2/(w*(w + im*(gamma0+gamma1)))
+end  
+
 
 struct DrudeLorentzSerie{T} <: OptProp
     eps0    :: T
@@ -91,22 +105,12 @@ struct DrudeLorentzSerie{T} <: OptProp
 end
 
 
-function susceptibility(model :: DrudeTerm, w)
-    @unpack wp,gamma0, gamma1 = model
-    return wp^2/(w*(w + im*(gamma0+gamma1)))
-end  
 
-function susceptibility(model :: LorentzTerm, w)
-    @unpack f, wp, gamma0 = model
-    return f*wp^2/(w0^2 - w^2 - im*w*gamma0)
-end    
-
-
-function permittivity(model :: DrudeLorentzSerie{T}, w) where T
+function permittivity(model :: DrudeLorentzSerie, w)
     @unpack eps0, drude, lorentz = model
     ϵ = eps0 - susceptibility(drude, w) 
-    for term in model.lorentz
-        ϵ += susceptibility(term, w) 
+    for term in lorentz
+        ϵ -= susceptibility(term, w) 
     end
     return ϵ 
 end  
