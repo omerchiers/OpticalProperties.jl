@@ -19,7 +19,9 @@ export OptProp, ElectricalProperties,
 
 # Constants
 export Cu,SiO2,Si,SiN,Vacuum,
-       Au,Au_latella,Al,W,Ti,TiW,TiW_v2,TiN,
+       Au,Au_latella,Al,
+       W,Ti,TiW,TiW_v2,
+       TiN,TiN_cethil,
        pSi_masetti,nSi_masetti,
        pSi_sze,nSi_sze,
        SiC,cBN,Si_cst
@@ -59,6 +61,32 @@ const TiW_v2 = Model(1.0,sqrt(5.0e5*1e15/8.85e-12), 0.0, 1.0e15, 0.0)
 
 "Drude model of Titanium Nitride obtained from Varpula et al."
 const TiN = Model(1.0,sqrt(7.57e5/1.5e-15/8.85e-12), 0.0, 1.0/(1.5e-15), 0.0)
+
+"""
+    gamma0_TiN_cethil(thickness)
+
+    Drude model for TiN based on reflectance measurements performed at CETHIL 04/2021.
+# Arguments
+* `thickness`: layer thickness in meter
+"""
+function gamma0_TiN_cethil(thickness)
+    th = thickness*1e9
+    if th<=20
+        gamma = 0.0087e15*th + 0.8939e15
+    else
+        gamma = 1.13e15
+    end
+end
+
+
+"""
+    TiN_cethil(thickness)
+
+    Returns the Model object for a Drude model with the parameters obtained from reflectance measurements performed at CETHIL 04/2021.
+# Arguments
+* `thickness`: layer thickness in meter
+"""
+TiN_cethil(thickness) = Model(1.0, 6.93e15,0.0,gamma0_TiN_cethil(thickness), 0.0)
 
 
 struct Polariton{T} <: OptProp
