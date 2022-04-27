@@ -88,6 +88,10 @@ end
 """
 TiN_cethil(thickness) = Model(1.0, 6.93e15,0.0,gamma0_TiN_cethil(thickness), 0.0)
 
+" Special case of TiN_cethil(thickness) where gamma does not depend on thickness"
+TiN_cethil_v2 = Model(1.0, 6.93e15,0.0, 1.13e15, 0.0)
+
+
 
 struct Polariton{T} <: OptProp
     eps_fin :: T
