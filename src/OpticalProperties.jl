@@ -29,6 +29,9 @@ export Cu,SiO2,Si,SiN,Vacuum,
 abstract type AbstractMaterial end
 abstract type OptProp <: AbstractMaterial end
 abstract type ElectricalProperties <: AbstractMaterial end
+abstract type Interband <: OptProp end
+abstract type Intraband <: OptProp end
+
 
 
 # Generic models
@@ -231,6 +234,7 @@ const pSi_masetti = MobilityModel(44.9,29.0,470.5,2.23e17,6.10e20,0.719,2.0,9.23
 # Create interpolations
 include("interpolation_objects.jl")
 include("SiN.jl")
+include("AlGaAs.jl")
 
 #To be deprecated
 include("singleton_types.jl")
