@@ -41,7 +41,7 @@ struct AlGaAs <: OptProp
     interband::AlGaAsInter
 end
 
-AlGaAs(x, T) = AlGaAs(AlGaAsIntra(x, T), AlGaAsInter(x, T)) 
+AlGaAs(x, T; y = 1) = AlGaAs(AlGaAsIntra(x, T), AlGaAsInter(x, T; y)) 
 
 
 function AlGaAsIntra(x, T; N = 1, Nsign = 1)
