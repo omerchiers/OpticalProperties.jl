@@ -41,8 +41,10 @@ struct AlGaAs <: OptProp
     interband::AlGaAsInter
 end
 
+AlGaAs(x, T) = AlGaAs(AlGaAsIntra(x, T), AlGaAsInter(x, T)) 
 
-function AlGaAsIntra(x, T, N, Nsign)
+
+function AlGaAsIntra(x, T; N = 1, Nsign = 1)
     convtorad = 2.0 * pi * 100 * c0
     eps_r = 12.9 - 2.84 * x
     eps_inf = 10.9 - 2.41 * x
@@ -82,7 +84,7 @@ function susceptibility(material::AlGaAsIntra, w)
 end
 
 
-function AlGaAsInter(x, y, T)
+function AlGaAsInter(x, T; y=1)
     #EPSALGAASSB_GONZALEZCUEVAS Computes the permittivity of Al(x)Ga(1-x)As(y)Sb(1-y), as a function of x and y (Gonzalez-Cuevas, 2017)
     ## Section 1: Loading data
     #GaAs
@@ -104,7 +106,7 @@ function AlGaAsInter(x, y, T)
     dAlAsT[7] = dAlAs0[1, 7] + T * dAlAs0[2, 7]
     dAlAsT[12:13] = @view(dAlAs0[1, 12:13]) + T * @view(dAlAs0[2, 12:13])
 
-    #=
+    
     #GaSb
     dGaSb0=[0.81 1.57 2.19 2.62 4.32 0.88 6.086 1.102 3.34 4.93 1e-3 1e-6 0.6804 0.02;
             4.2e-4 4.2e-4 6.8e-4 6.7e-4 9e-4 6e-4 4.72e-5 0 0 0 0 1.24e-4 4.8e-4 0;
@@ -123,7 +125,7 @@ function AlGaAsInter(x, y, T)
     dAlSbT[7] = dAlSb0[1,7] + T*dAlSb0[2,7]
     dAlSbT[12:13] = dAlSb0[1,12:13] + T*dAlSb0[2,12:13]
 
-    =#
+    
     ## Section 2: Interpolation
     # GaSb
     if x == 0 && y == 0
@@ -146,14 +148,14 @@ function AlGaAsInter(x, y, T)
         # Interpolation : energy levels
         C = [0.37; 0.07; 0.45; 0.00; 0.02; 0.06]
         dAlGaAsT = x * dAlAsT[1:6] + (1 - x) * dGaAsT[1:6] - x * (1 - x) * C
-        #=
+        
         C = [0.72; 0.15; 0.00; 0.00; 0.00; 0.28]
         dAlAsSbT = y * dAlAsT[1:6] + (1-y) * dAlSbT[1:6] - y * (1-y) * C
         C=[1.20; 0.61; 0.00; 0.00; 0.00; 1.09]
         dGaAsSbT = y * dGaAsT[1:6] + (1-y) * dGaSbT[1:6] - y * (1-y) * C
         C = [0.69; 0.30; 0.28; 0.32; 0.00; 0.55]
         dAlGaSbT = x * dAlSbT[1:6] + (1-x) * dGaSbT[1:6] - x * (1-x) *C
-        =#
+    
         dAlGaAsSbT = 1.0 / (x * (1 - x) + y * (1 - y)) * (x * (1 - x) * (y * dAlGaAsT))
 
         # Interpolation : other parameters
