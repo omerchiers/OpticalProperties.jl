@@ -1,6 +1,6 @@
 module OpticalProperties
 
-using MyPhysicalConstants, Interpolations, Parameters, QuadGK
+using MyPhysicalConstants, Interpolations, Parameters, QuadGK, StaticArrays
 
 # Functions
 export convert_prop, skin_depth,
