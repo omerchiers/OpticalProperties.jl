@@ -32,7 +32,7 @@ end
 
 
 struct AlGaAsInter{T} <: Interband
-    dAlGaAsSbT::Vector{T}
+    dAlGaAsSbT:: T #SVector{T}
 end
 
 
@@ -169,7 +169,8 @@ function AlGaAsInter(x, T; y=1)
         ]
 
     end
-    return   AlGaAsInter(Vector(dAlGaAsSbT))
+    #data = SVector{14}(dAlGaAsSbT)
+    return  AlGaAsInter(dAlGaAsSbT)
 end
 
 
@@ -179,24 +180,28 @@ function susceptibility(material::AlGaAsInter, w)
     ## Section 3: Computation of the dielectric function
     E = ħ * w / electron
     Eg = dAlGaAsSbT[1] * electron
-
-    X0 = (E + im * dAlGaAsSbT[11]) / dAlGaAsSbT[1]
-    Xs0 = (E + im * dAlGaAsSbT[11]) / dAlGaAsSbT[2]
-    X1 = (E + im * dAlGaAsSbT[12]) / dAlGaAsSbT[3]
-    Xs1 = (E + im * dAlGaAsSbT[12]) / dAlGaAsSbT[4]
-    Xg = (E + im * dAlGaAsSbT[14]) / dAlGaAsSbT[6]
+    
+    num1 = E + im * dAlGaAsSbT[11]
+    num2 = E + im * dAlGaAsSbT[12]
+    num3 = E + im * dAlGaAsSbT[14]  
+    X0 = num1 / dAlGaAsSbT[1]
+    Xs0 = num1 / dAlGaAsSbT[2]
+    X1 = num2 / dAlGaAsSbT[3]
+    Xs1 = num2 / dAlGaAsSbT[4]
+    Xg = num3 / dAlGaAsSbT[6]
+     
     fX0 = X0^(-2) * (2 - sqrt(1 + X0) - sqrt(1 - X0))
     fXs0 = Xs0^(-2) * (2 - sqrt(1 + Xs0) - sqrt(1 - Xs0))
 
-    B1 = 44 * (dAlGaAsSbT[3] + 1 / 3 * (dAlGaAsSbT[4] - dAlGaAsSbT[3])) / (dAlGaAsSbT[7] * dAlGaAsSbT[3]^2)
-    B2 = 44 * (dAlGaAsSbT[3] + 2 / 3 * (dAlGaAsSbT[4] - dAlGaAsSbT[3])) / (dAlGaAsSbT[7] * dAlGaAsSbT[4]^2)
+    B1 = 44.0 * (dAlGaAsSbT[3] + 1.0 / 3.0 * (dAlGaAsSbT[4] - dAlGaAsSbT[3])) / (dAlGaAsSbT[7] * dAlGaAsSbT[3]^2)
+    B2 = 44.0 * (dAlGaAsSbT[3] + 2.0 / 3.0 * (dAlGaAsSbT[4] - dAlGaAsSbT[3])) / (dAlGaAsSbT[7] * dAlGaAsSbT[4]^2)
 
     eps1 = dAlGaAsSbT[8] * dAlGaAsSbT[1]^(-1.5) * (fX0 + 0.5 * (dAlGaAsSbT[1] / dAlGaAsSbT[2])^(1.5) * fXs0)
     eps2 = -B1 * X1^(-2) * log(1 - X1^2) - B2 * Xs1^(-2) * log(1 - Xs1^2)
     eps3 = dAlGaAsSbT[9] * dAlGaAsSbT[5]^2 / (dAlGaAsSbT[5]^2 - E^2 - im * E * dAlGaAsSbT[13])
-    eps4 = 2 * dAlGaAsSbT[10] / pi * (-Xg^(-2) * log(dAlGaAsSbT[3] / dAlGaAsSbT[6]) +
-                                      0.5 * (1 + Xg .^ (-1)) .^ 2 .* log((Xg + dAlGaAsSbT[3] / dAlGaAsSbT[6]) ./ (Xg + 1)) +
-                                      0.5 * (1 - Xg .^ (-1)) .^ 2 .* log((Xg - dAlGaAsSbT[3] / dAlGaAsSbT[6]) ./ (Xg - 1)))
+    eps4 = 2.0 * dAlGaAsSbT[10] / pi * (-Xg^(-2) * log(dAlGaAsSbT[3] / dAlGaAsSbT[6]) +
+                                      0.5 * (1 + 1.0/Xg)^ 2 * log((Xg + dAlGaAsSbT[3] / dAlGaAsSbT[6]) / (Xg + 1)) +
+                                      0.5 * (1 - 1.0/Xg)^ 2 * log((Xg - dAlGaAsSbT[3] / dAlGaAsSbT[6]) / (Xg - 1)))
     chi = eps1 + eps2 + eps3 + eps4
 
     return chi 
