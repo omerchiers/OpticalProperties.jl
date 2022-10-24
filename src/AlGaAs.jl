@@ -36,13 +36,12 @@ struct AlGaAsInter{T} <: Interband
 end
 
 
-struct AlGaAs <: OptProp
-    intraband::AlGaAsIntra
-    interband::AlGaAsInter
+struct AlGaAs{T, U} <: OptProp
+    intraband::AlGaAsIntra{T}
+    interband::AlGaAsInter{U}
 end
 
 AlGaAs(x, T; y = 1) = AlGaAs(AlGaAsIntra(x, T), AlGaAsInter(x, T; y)) 
-
 
 function AlGaAsIntra(x, T; N = 1, Nsign = 1)
     convtorad = 2.0 * pi * 100 * c0
@@ -172,6 +171,7 @@ function AlGaAsInter(x, T; y=1)
     #data = SVector{14}(dAlGaAsSbT)
     return  AlGaAsInter(dAlGaAsSbT)
 end
+
 
 
 
