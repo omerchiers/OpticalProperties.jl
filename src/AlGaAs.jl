@@ -1,12 +1,12 @@
-struct AlGaAsElectricalProperties{T}
+struct AlGaAsElectricalProperties{T, U}
     T :: T
-    mx::Vector{T}
-    mu_min::Vector{T}
-    mu_max::Vector{T}
-    nref::Vector{T}
-    alpha::Vector{T}
-    theta1::Vector{T}
-    theta2::Vector{T}
+    mx::Vector{U}
+    mu_min::Vector{U}
+    mu_max::Vector{U}
+    nref::Vector{U}
+    alpha::Vector{U}
+    theta1::Vector{U}
+    theta2::Vector{U}
 end
 
 
@@ -16,7 +16,7 @@ function mobility(material::AlGaAsElectricalProperties, N)
 end    
 
 
-struct AlGaAsIntra{T} <: Intraband
+struct AlGaAsIntra{T, U} <: Intraband
     eps_inf::T
     wlog::T
     wtog::T
@@ -26,7 +26,7 @@ struct AlGaAsIntra{T} <: Intraband
     ga::T
     wp::T
     gamma::T
-    elec_prop::AlGaAsElectricalProperties{T}
+    elec_prop::AlGaAsElectricalProperties{U, T}
 end
 
 
@@ -36,9 +36,9 @@ struct AlGaAsInter{T} <: Interband
 end
 
 
-struct AlGaAs{T, U} <: OptProp
-    intraband::AlGaAsIntra{T}
-    interband::AlGaAsInter{U}
+struct AlGaAs{T, U, V} <: OptProp
+    intraband::AlGaAsIntra{T, U}
+    interband::AlGaAsInter{V}
 end
 
 AlGaAs(x, T; y = 1) = AlGaAs(AlGaAsIntra(x, T), AlGaAsInter(x, T; y)) 
