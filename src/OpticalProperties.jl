@@ -317,10 +317,7 @@ function permittivity(material::Model,w) :: Complex{Float64}
 end
 
 function permittivity(material::Polariton,w) :: Complex{Float64}
-    eps_fin = material.eps_fin
-    w_lo    = material.w_lo
-    w_to    = material.w_to
-    gamma   = material.gamma
+    (;eps_fin, w_lo, w_to, gamma) = material
     return  eps_fin*(w^2-w_lo^2 + im*gamma*w)/(w^2-w_to^2 + im*gamma*w)
 end
 
