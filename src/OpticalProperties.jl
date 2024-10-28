@@ -103,8 +103,8 @@ struct Polariton{T} <: OptProp
     w_to    :: T # rad/s
     gamma   :: T # rad/s
 end
-SiC = Polariton(6.7,1.827e14,1.495e14,8.971e11)
-cBN = Polariton(4.46,2.451e14,1.985e14,9.934e11)
+const SiC = Polariton(6.7,1.827e14,1.495e14,8.971e11)
+const cBN = Polariton(4.46,2.451e14,1.985e14,9.934e11)
 
 
 struct LorentzTerm{T} <: OptProp
