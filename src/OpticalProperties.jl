@@ -15,7 +15,8 @@ export OptProp, ElectricalProperties,
        MaterialFile, Sellmeier,
        ResistivityFile, MobilityModel,
        Cbn, Sic,
-       Si_n_doped,Si_p_doped
+       Si_n_doped,Si_p_doped,
+       SiN20_300
 
 # Constants
 export Cu,SiO2,Si,SiN,Vacuum,
