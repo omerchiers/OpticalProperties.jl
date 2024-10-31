@@ -20,27 +20,27 @@ export DrudeLorentz,
     ParallelMixing,
     PerpendicularMixing,
     Sellmeier,
-    ResistivityFile, 
+    ResistivityFile,
     MobilityModel
 
 # Instances
-export Cu, SiO2, Si, SiN, Vacuum,
-    Au, Au_latella, Al,
-    W, Ti, TiW, TiW_v2,
-    TiN, TiN_cethil,
-    pSi_masetti, nSi_masetti,
-    pSi_sze, nSi_sze,
-    SiC, cBN, Si_cst,
-    AlGaAs,
-    Si_n_doped, 
-    Si_p_doped
-
+export Au, Au_latella, Al, AlGaAs,
+    cBN, Cu,
+    H2O,
+    Si, Si_cst,
+    pSi_masetti_drude, nSi_masetti_drude,
+    pSi_sze_drude, nSi_sze_drude,
+    SiC, SiN, SiN20_300, SiO2,
+    Ti, TiN, TiN_cethil, TiW, TiW_v2,
+    W,
+    Vacuum
 
 #data necessary for interpolations
 include("./data/SiO2.jl")
 include("./data/Cu.jl")
 include("./data/resistivity_n-Si.jl")
 include("./data/resistivity_p-Si.jl")
+include("./data/H2O.jl")
 
 
 include("interface.jl") #defines the functions and methods of the interface
@@ -51,6 +51,7 @@ include("semi-conductors/AlGaAs.jl")
 include("semi-conductors/Si_doped.jl")
 include("semi-conductors/SiN.jl")
 include("semi-conductors/others.jl")
+include("effective_medium_models.jl")
 
 
 
