@@ -24,16 +24,14 @@ end
     
     @test permittivity(Si, 1e15) ≈ 11.953741590306542 + 0.0im
     @test permittivity(Si_cst, 1e15) ≈ 11.7 + 0.0im
-    @test permittivity(Si_n_doped(nSi_masetti, 1e18),1e15) ≈ 11.688219082484645 + 0.0002770873102564041im
-    @test permittivity(Si_p_doped(pSi_masetti, 1e18),1e15) ≈ 11.690649126714574 + 0.0003017371005363506im
-    @test permittivity(Si_n_doped(nSi_sze, 1e18),1e15) ≈ 11.688220041596612 + 0.00029676493381676836im
-    @test permittivity(Si_p_doped(pSi_sze, 1e18),1e15) ≈ 11.690662239431358 + 0.0004619101805519043im
+    @test permittivity(nSi_masetti_drude(1e18),1e15) ≈ 11.688219082484645 + 0.0002770873102564041im
+    @test permittivity(pSi_masetti_drude(1e18),1e15) ≈ 11.690649126714574 + 0.0003017371005363506im
+    @test permittivity(nSi_sze_drude(1e18),1e15) ≈ 11.688220041596612 + 0.00029676493381676836im
+    @test permittivity(pSi_sze_drude(1e18),1e15) ≈ 11.690662239431358 + 0.0004619101805519043im
 
     @test permittivity(SiC, 1e15) ≈ 6.62441617687685 + 6.935638015943665e-5im
     @test permittivity(SiN20_300, 1e15) ≈ 6.119993069325621 + 8.946295465628795e-11im
     @test permittivity(SiN, 1e15) ≈ 3.947544978277769 + 0.0im
-
- 
 end
 
 @testset "effective medium models" begin
