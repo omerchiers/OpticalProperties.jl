@@ -15,7 +15,7 @@ susceptibility(material::DrudeLorentz, w) = permittivity(material, w) - material
 function susceptibility(material::Brendel, w)
     (; eps0, w0, wp, gamma0) = material.dl
     (; σ) = material
-    integrand(x) = exp(-(x - w0)^2 / (2.0 * σ^2)) * susceptibility(Model(eps0, wp, x, gamma0), w) / sqrt(2.0 * pi) / σ
+    integrand(x) = exp(-(x - w0)^2 / (2.0 * σ^2)) * susceptibility(DrudeLorentz(eps0, wp, x, gamma0), w) / sqrt(2.0 * pi) / σ
     val, err = quadgk(integrand, 10 * (σ - w0), 10 * (σ + w0))
     return val
 end
@@ -37,4 +37,4 @@ const b3 = Brendel(DrudeLorentz(6.12, 63 * c0 * 2 * pi, 1063 * c0 * pi, 36 * c0 
 const b4 = Brendel(DrudeLorentz(6.12, 702 * c0 * 2 * pi, 1185 * c0 * pi, 57 * c0 * pi), 592 * c0 * 2 * pi)
 const b5 = Brendel(DrudeLorentz(6.12, 0 * c0 * 2 * pi, 7931 * c0 * pi, 1 * c0 * pi), 2987 * c0 * 2 * pi)
 
-SN20_300 = SerieBrendel([b1, b2, b3, b4, b5])
+const SiN20_300 = SerieBrendel([b1, b2, b3, b4, b5])
