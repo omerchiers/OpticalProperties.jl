@@ -2,6 +2,7 @@
 # Material files
 include("./data/Cu.jl")
 include("./data/SiO2.jl")
+include("./data/H2O.jl")
 include("./data/resistivity_n-Si.jl")
 include("./data/resistivity_p-Si.jl")
 
@@ -30,3 +31,11 @@ const nSi_sze = ResistivityFile(itp_nSi)
 knots = (pSi_data[:,1],)
 const itp_pSi = interpolate(knots, pSi_data[:,2], Gridded(Linear()))
 const pSi_sze = ResistivityFile(itp_pSi)
+
+
+# Water
+knots = (h2o_data[:,1],)
+const itp_h2o_re = interpolate(knots, h2o_data[:,2], Gridded(Linear()))
+const itp_h2o_im = interpolate(knots, h2o_data[:,3], Gridded(Linear()))
+const H2O = PropertyInterpolated(:refr_ind, :wavelength, itp_h2o_re,itp_h2o_im)
+
