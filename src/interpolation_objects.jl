@@ -37,5 +37,5 @@ const pSi_sze = ResistivityFile(itp_pSi)
 knots = (h2o_data[:,1],)
 const itp_h2o_re = interpolate(knots, h2o_data[:,2], Gridded(Linear()))
 const itp_h2o_im = interpolate(knots, h2o_data[:,3], Gridded(Linear()))
-const H2O = PropertyInterpolated(:refr_ind, :wavelength, itp_h2o_re,itp_h2o_im)
+const H2O = MaterialFile(:refr_ind, :wavelength, itp_h2o_re,itp_h2o_im)
 
