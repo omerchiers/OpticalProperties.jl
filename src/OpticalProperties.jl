@@ -52,6 +52,7 @@ include("semi-conductors/Si_doped.jl")
 include("semi-conductors/SiN.jl")
 include("semi-conductors/others.jl")
 include("effective_medium_models.jl")
+include("list_materials.jl")
 
 
 
