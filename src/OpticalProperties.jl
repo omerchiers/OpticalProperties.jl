@@ -26,7 +26,8 @@ export Cu,SiO2,Si,SiN,Vacuum,
        pSi_masetti,nSi_masetti,
        pSi_sze,nSi_sze,
        SiC,cBN,Si_cst, 
-       AlGaAs
+       AlGaAs,
+       H2O
 
 abstract type AbstractMaterial end
 abstract type OptProp <: AbstractMaterial end
