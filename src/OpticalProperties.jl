@@ -38,8 +38,6 @@ export Au, Au_latella, Al, AlGaAs,
 #data necessary for interpolations
 include("./data/SiO2.jl")
 include("./data/Cu.jl")
-include("./data/resistivity_n-Si.jl")
-include("./data/resistivity_p-Si.jl")
 include("./data/H2O.jl")
 
 
