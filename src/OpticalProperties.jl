@@ -8,7 +8,7 @@ export permittivity,
     skin_depth
 
 # Abstract types
-export OpticalProperty, ElectricalProperty
+export OpticalProperty
 
 # Structs
 export DrudeLorentz,
