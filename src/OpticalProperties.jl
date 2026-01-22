@@ -1,7 +1,6 @@
 module OpticalProperties
 
-
-using MyPhysicalConstants, Interpolations, QuadGK, StaticArrays
+using MyPhysicalConstants, Interpolations, QuadGK, StaticArrays, ElectricalProperties
 
 # Interface functions
 export permittivity,
