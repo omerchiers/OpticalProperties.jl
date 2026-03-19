@@ -25,7 +25,7 @@ end
 Si_n_masetti_drude(Nn) = DrudeLorentz(Si_n_masetti(Nn))
 Si_p_masetti_drude(Np) = DrudeLorentz(Si_p_masetti(Np))
 
-Si_n_sze_drude(Nn) = DrudeLorentz(Si_p_sze(Nn))
+Si_n_sze_drude(Nn) = DrudeLorentz(Si_n_sze(Nn))
 Si_p_sze_drude(Np) = DrudeLorentz(Si_p_sze(Np))
 
 Si_n_regianni_drude(Nd, Na, T) = DrudeLorentz(Si_n_regianni(Nd, Na, T))
