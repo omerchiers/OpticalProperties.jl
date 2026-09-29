@@ -27,6 +27,10 @@ julia> Pkg.add("https://git-cethil.insa-lyon.fr/omerchiers/opticalproperties.jl"
 ```
 
 
+## Available materials
+The following materials have been implemented:
+Au, Al, AlGaAs, cBN, Cu, H2O, Si, doped Si, SiC, SiN, SiO2, Ti, TiN, TiN, TiW, TiW, W, Vacuum
+
 ## Quickstart
 This is an example of the usage for gold. The functions presented take as arguments the material, here gold and the frequency in rad/s.
 ```julia
