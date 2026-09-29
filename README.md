@@ -41,6 +41,3 @@ julia> refractive_index(Au(),1e15)
 julia> skin_depth(Au(),1e15)
 2.2759509105115573e-8
 ```
-
-## Available materials
-The following materials have been implemented:
