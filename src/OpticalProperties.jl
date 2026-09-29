@@ -32,6 +32,15 @@ export Au, Au_latella, Al, AlGaAs,
     W,
     Vacuum
 
+# the istances for those models require prefixing with OpticalProperties.
+# This is to keep the same convetion as for the same functions from 
+# ElectricalProperties which have exactly the same naming and arguments but give back instead 
+# a mobility model. 
+public Si_p_masetti, Si_n_masetti,
+    Si_p_sze, Si_n_sze,
+    Si_p_regianni, Si_n_regianni
+
+
 #data necessary for interpolations
 include("./data/SiO2.jl")
 include("./data/Cu.jl")
