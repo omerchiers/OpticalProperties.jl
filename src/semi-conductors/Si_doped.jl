@@ -28,6 +28,6 @@ Si_p_masetti(Np) = DrudeLorentz(ElectricalProperties.Si_p_masetti(Np))
 Si_n_sze(Nn) = DrudeLorentz(ElectricalProperties.Si_n_sze(Nn))
 Si_p_sze(Np) = DrudeLorentz(ElectricalProperties.Si_p_sze(Np))
 
-Si_n_regianni_drude(Nd, Na, T) = DrudeLorentz(Si_n_regianni(Nd, Na, T))
-Si_p_regianni_drude(Nd, Na, T) = DrudeLorentz(Si_p_regianni(Nd, Na, T))
+Si_n_regianni(Nd, Na, T) = DrudeLorentz(ElectricalProperties.Si_n_regianni(Nd, Na, T))
+Si_p_regianni(Nd, Na, T) = DrudeLorentz(ElectricalProperties.Si_p_regianni(Nd, Na, T))
 
