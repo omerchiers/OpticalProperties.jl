@@ -11,10 +11,10 @@ cm^{-3}, e is the elementary charge in C, me is the effective mass in kg and ϵ0
 
 The damping constant γ0 = n⋅e²⋅10⁴⋅ρ / me where \rho is the resistivity in Ω cm
  """
-function DrudeLorentz(material::ElectricalProperty)
-    mu = mobility(material)
-    N = carrier_concentration(material)
-    me = effective_mass(material)
+function DrudeLorentz(material::ElectricalProperties.ElectricalProperty)
+    mu = ElectricalProperties.mobility(material)
+    N = ElectricalProperties.carrier_concentration(material)
+    me = ElectricalProperties.effective_mass(material)
     return DrudeLorentz(11.7,
         sqrt(N * 1e6 * electron^2 / me / epsilon0),
         0.0,
