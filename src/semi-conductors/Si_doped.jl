@@ -18,7 +18,7 @@ function DrudeLorentz(material::ElectricalProperties.ElectricalProperty)
     return DrudeLorentz(11.7,
         sqrt(N * 1e6 * electron^2 / me / epsilon0),
         0.0,
-        N * 1e4 * electron^2 * resistivity(mu, N) / me,
+        N * 1e4 * electron^2 * ElectricalProperties.resistivity(mu, N) / me,
         0.0)
 end
 
