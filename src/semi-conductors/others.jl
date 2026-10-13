@@ -18,7 +18,7 @@ Compute the dielectric permittivity for when given a Polariton model
 * `model :: Polariton` : is a type for the material you want to pass
 * `w :: Real` : pulsation in rad s^(-1)
 """
-function permittivity(model::Polariton, w)::Complex{Float64}
+function permittivity(model::Polariton, w)
     (; eps_fin, w_lo, w_to, gamma) = model
     return eps_fin * (w^2 - w_lo^2 + im * gamma * w) / (w^2 - w_to^2 + im * gamma * w)
 end
