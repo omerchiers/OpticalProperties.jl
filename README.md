@@ -3,8 +3,7 @@ This julia package computes permittivities and refractive indices for usual mate
 This is very much work in progress.
 
 ## Warning
-The API is not very consistent yet. Especially the way materials are exported.
-Some are exported as singleton types (Al(),Au(),Sic()), others as constants (Cu).
+This package is still in development and the interface might break regularly.
 
 ## Installation
 From version 0.4.0 you will need Julia version 1.11 or higher. 
