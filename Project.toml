@@ -16,3 +16,4 @@ MyPhysicalConstants = {url = "https://github.com/omerchiers/MyPhysicalConstants.
 ElectricalProperties = {url = "https://github.com/omerchiers/ElectricalProperties.jl"}
 
 [compat]
+ElectricalProperties = "0.2.2"
