@@ -14,7 +14,7 @@ julia> using Pkg
 julia> Pkg.add("https://github.com/omerchiers/OpticalProperties.jl")
 ```
 
-To install from cethil gitlab, type in the Julia repl
+To install from cethil gitlab, add first CETHIL_REGISTRY, then type in the Julia repl
 ```julia
 julia> using Pkg
 julia> Pkg.add("https://git-cethil.insa-lyon.fr/omerchiers/opticalproperties.jl")
